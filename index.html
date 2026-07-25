@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nagalakshmi K — Full-Stack Developer, Real-Time Systems</title>
+<meta name="description" content="Nagalakshmi K — Full-stack developer specializing in real-time communication systems: chat, VoIP, and video conferencing." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0A0F1C;
+    --bg-panel: #101828;
+    --bg-panel-alt: #141F35;
+    --line: rgba(255,255,255,0.08);
+    --line-strong: rgba(255,255,255,0.14);
+    --text: #E9EDF5;
+    --text-muted: #8B96B3;
+    --text-faint: #5B6684;
+    --signal: #43D9C4;
+    --signal-dim: rgba(67,217,196,0.14);
+    --amber: #F2A65A;
+    --amber-dim: rgba(242,166,90,0.14);
+    --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+    --font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+  }
+  *{ box-sizing: border-box; margin:0; padding:0; }
+  html{ scroll-behavior: smooth; }
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  a{ color: inherit; text-decoration: none; }
+  .wrap{ max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+  ::selection{ background: var(--signal); color: #06231F; }
+
+  /* background texture: faint signal grid */
+  .bg-grid{
+    position: fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(67,217,196,0.07), transparent 40%),
+      radial-gradient(circle at 85% 92%, rgba(242,166,90,0.05), transparent 40%);
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position: sticky; top:0; z-index: 50;
+    background: rgba(10,15,28,0.82);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav.wrap{ display:flex; align-items:center; justify-content:space-between; height:72px; }
+  .brand{ font-family: var(--font-display); font-weight:700; font-size:18px; letter-spacing:0.02em; display:flex; align-items:center; gap:10px; }
+  .brand .dot{ width:8px; height:8px; border-radius:50%; background: var(--signal); box-shadow: 0 0 0 4px var(--signal-dim); }
+  .nav-links{ display:flex; align-items:center; gap:28px; font-size:14px; color: var(--text-muted); }
+  .nav-links a{ transition: color .2s ease; }
+  .nav-links a:hover{ color: var(--text); }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family: var(--font-mono); font-size:13px; font-weight:500;
+    padding:10px 18px; border-radius:8px; border:1px solid var(--line-strong);
+    transition: all .2s ease; white-space:nowrap;
+  }
+  .btn-primary{ background: var(--signal); color:#06231F; border-color: var(--signal); }
+  .btn-primary:hover{ background:#5EE6D2; }
+  .btn-ghost:hover{ background: rgba(255,255,255,0.05); border-color: var(--signal); }
+
+  /* ---------- HERO ---------- */
+  .hero{ position:relative; z-index:1; padding: 96px 0 72px; }
+  .hero-grid{ display:grid; grid-template-columns: 1.15fr 0.85fr; gap:48px; align-items:center; }
+  .eyebrow{
+    font-family: var(--font-mono); font-size:13px; color: var(--signal);
+    letter-spacing:0.08em; display:flex; align-items:center; gap:10px; margin-bottom:22px;
+  }
+  .eyebrow::before{ content:''; width:28px; height:1px; background: var(--signal); }
+  h1{
+    font-family: var(--font-display); font-weight:700;
+    font-size: clamp(34px, 5vw, 54px); line-height:1.08; letter-spacing:-0.01em;
+    margin-bottom:22px;
+  }
+  h1 .accent{ color: var(--signal); }
+  .lede{ font-size:17px; color: var(--text-muted); max-width:520px; margin-bottom:32px; }
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom: 36px;}
+  .status-chip{
+    display:inline-flex; align-items:center; gap:9px;
+    font-family: var(--font-mono); font-size:12.5px; color: var(--signal);
+    background: var(--signal-dim); border:1px solid rgba(67,217,196,0.3);
+    padding:8px 14px; border-radius:100px;
+  }
+  .status-chip .ping{
+    width:7px; height:7px; border-radius:50%; background: var(--signal);
+    box-shadow: 0 0 0 0 rgba(67,217,196,0.6); animation: ping 1.8s infinite;
+  }
+  @keyframes ping{
+    0%{ box-shadow: 0 0 0 0 rgba(67,217,196,0.55); }
+    70%{ box-shadow: 0 0 0 8px rgba(67,217,196,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(67,217,196,0); }
+  }
+
+  /* waveform visual */
+  .wave-panel{
+    background: linear-gradient(160deg, var(--bg-panel), var(--bg-panel-alt));
+    border:1px solid var(--line); border-radius:16px; padding:28px;
+    position:relative; overflow:hidden;
+  }
+  .wave-panel .label{ font-family: var(--font-mono); font-size:12px; color: var(--text-faint); display:flex; justify-content:space-between; margin-bottom:18px;}
+  .bars{ display:flex; align-items:flex-end; gap:4px; height:120px; }
+  .bars span{
+    flex:1; background: linear-gradient(180deg, var(--signal), rgba(67,217,196,0.15));
+    border-radius:3px 3px 0 0; animation: bar 1.6s ease-in-out infinite;
+  }
+  @keyframes bar{ 0%,100%{ transform: scaleY(0.35); } 50%{ transform: scaleY(1); } }
+  .wave-panel .stat-row{ display:flex; justify-content:space-between; margin-top:20px; padding-top:18px; border-top:1px solid var(--line); }
+  .wave-panel .stat{ text-align:left; }
+  .wave-panel .stat .n{ font-family: var(--font-display); font-size:22px; font-weight:700; }
+  .wave-panel .stat .l{ font-family: var(--font-mono); font-size:11px; color: var(--text-faint); text-transform:uppercase; letter-spacing:.05em; }
+
+  /* section shell */
+  section{ position:relative; z-index:1; padding: 76px 0; border-top:1px solid var(--line); }
+  .kicker{ font-family: var(--font-mono); font-size:12.5px; color: var(--amber); letter-spacing:0.1em; margin-bottom:10px; }
+  h2{ font-family: var(--font-display); font-size: clamp(24px,3vw,32px); font-weight:700; margin-bottom:14px; }
+  .section-intro{ color: var(--text-muted); max-width:620px; margin-bottom:44px; font-size:15.5px; }
+
+  /* about */
+  .about-grid{ display:grid; grid-template-columns: 1.3fr 1fr; gap:56px; }
+  .about-grid p{ color: var(--text-muted); margin-bottom:16px; font-size:15.5px; }
+  .about-grid p strong{ color: var(--text); font-weight:600; }
+  .fact-list{ display:flex; flex-direction:column; gap:0; }
+  .fact{ display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--line); font-size:14px; }
+  .fact:first-child{ padding-top:0; }
+  .fact .k{ color: var(--text-faint); font-family: var(--font-mono); }
+  .fact .v{ color: var(--text); font-weight:500; text-align:right; }
+
+  /* skills */
+  .skill-groups{ display:grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap:22px; }
+  .skill-card{ background: var(--bg-panel); border:1px solid var(--line); border-radius:12px; padding:20px; }
+  .skill-card h3{ font-family: var(--font-mono); font-size:12px; color: var(--signal); text-transform:uppercase; letter-spacing:.08em; margin-bottom:14px; }
+  .chip-row{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{ font-family: var(--font-mono); font-size:12.5px; color: var(--text-muted); background: rgba(255,255,255,0.04); border:1px solid var(--line); padding:6px 11px; border-radius:6px; }
+
+  /* experience timeline */
+  .timeline{ position:relative; padding-left:28px; }
+  .timeline::before{ content:''; position:absolute; left:5px; top:6px; bottom:6px; width:1px; background: var(--line-strong); }
+  .tl-item{ position:relative; padding-bottom:40px; }
+  .tl-item:last-child{ padding-bottom:0; }
+  .tl-item::before{ content:''; position:absolute; left:-28px; top:5px; width:11px; height:11px; border-radius:50%; background: var(--bg); border:2px solid var(--signal); }
+  .tl-head{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; margin-bottom:4px;}
+  .tl-role{ font-family: var(--font-display); font-size:19px; font-weight:600; }
+  .tl-date{ font-family: var(--font-mono); font-size:12.5px; color: var(--text-faint); }
+  .tl-org{ color: var(--amber); font-size:14px; margin-bottom:14px; }
+  .tl-item ul{ list-style:none; display:flex; flex-direction:column; gap:9px; }
+  .tl-item li{ color: var(--text-muted); font-size:14.5px; padding-left:18px; position:relative; }
+  .tl-item li::before{ content:'▸'; position:absolute; left:0; color: var(--signal); font-size:12px; top:2px; }
+
+  /* projects */
+  .project-featured{
+    background: linear-gradient(135deg, var(--bg-panel), var(--bg-panel-alt));
+    border:1px solid rgba(67,217,196,0.25); border-radius:16px; padding:34px;
+    margin-bottom:26px; position:relative; overflow:hidden;
+  }
+  .project-featured::before{
+    content:''; position:absolute; top:-40%; right:-10%; width:340px; height:340px;
+    background: radial-gradient(circle, rgba(67,217,196,0.12), transparent 65%);
+  }
+  .tag-featured{
+    font-family: var(--font-mono); font-size:11px; color:#06231F; background: var(--signal);
+    padding:4px 10px; border-radius:5px; display:inline-block; margin-bottom:16px; font-weight:600; letter-spacing:.03em;
+  }
+  .project-featured h3{ font-family: var(--font-display); font-size:23px; margin-bottom:12px; position:relative; }
+  .project-featured p{ color: var(--text-muted); font-size:15px; max-width:680px; margin-bottom:18px; position:relative; }
+  .tech-tags{ display:flex; flex-wrap:wrap; gap:8px; position:relative; }
+  .tech-tags span{ font-family: var(--font-mono); font-size:12px; color: var(--signal); border:1px solid rgba(67,217,196,0.3); background: var(--signal-dim); padding:5px 10px; border-radius:5px; }
+
+  .project-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:20px; }
+  .project-card{ background: var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:26px; transition: border-color .2s ease, transform .2s ease; }
+  .project-card:hover{ border-color: var(--line-strong); transform: translateY(-2px); }
+  .project-card h3{ font-family: var(--font-display); font-size:17px; margin-bottom:10px; }
+  .project-card p{ color: var(--text-muted); font-size:14px; margin-bottom:16px; }
+  .project-card .tech-tags span{ font-size:11px; padding:4px 9px; color: var(--text-muted); border-color: var(--line); background: rgba(255,255,255,0.03); }
+  .highlight-inline{ color: var(--amber); font-weight:600; }
+
+  /* education */
+  .edu-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:20px; }
+  .edu-card{ border:1px solid var(--line); border-radius:12px; padding:22px; background: var(--bg-panel); }
+  .edu-card .deg{ font-family: var(--font-display); font-weight:600; font-size:16px; margin-bottom:4px; }
+  .edu-card .inst{ color: var(--text-muted); font-size:14px; margin-bottom:10px; }
+  .edu-card .yr{ font-family: var(--font-mono); font-size:12px; color: var(--text-faint); }
+
+  /* career note / status panel */
+  .status-panel{
+    border:1px solid var(--line); border-radius:16px; padding:32px;
+    background: repeating-linear-gradient(135deg, var(--bg-panel), var(--bg-panel) 2px, var(--bg-panel-alt) 2px, var(--bg-panel-alt) 3px);
+    background-size: 6px 6px; background-color: var(--bg-panel);
+  }
+  .status-panel-inner{ background: var(--bg-panel); border-radius:12px; padding:28px; border:1px solid var(--line); }
+  .status-title{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:600; font-size:18px; margin-bottom:14px; }
+  .status-panel p{ color: var(--text-muted); font-size:14.5px; margin-bottom:10px; max-width:640px; }
+  .status-panel p:last-child{ margin-bottom:0; }
+  .status-panel .learning-tags{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+  .learning-tags span{ font-family: var(--font-mono); font-size:12px; color: var(--amber); border:1px solid rgba(242,166,90,0.3); background: var(--amber-dim); padding:6px 12px; border-radius:100px; }
+
+  /* contact / footer */
+  footer{ position:relative; z-index:1; padding: 80px 0 48px; border-top:1px solid var(--line); }
+  .contact-box{ text-align:center; max-width:560px; margin:0 auto 56px; }
+  .contact-box h2{ margin-bottom:14px; }
+  .contact-box p{ color: var(--text-muted); margin-bottom:30px; }
+  .contact-links{ display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
+  .foot-bottom{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding-top:32px; border-top:1px solid var(--line); font-size:13px; color: var(--text-faint); font-family: var(--font-mono); }
+
+  @media (max-width: 860px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .about-grid{ grid-template-columns:1fr; }
+    .edu-grid{ grid-template-columns:1fr; }
+    .nav-links{ display:none; }
+  }
+
+  [data-reveal]{ opacity:0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+  [data-reveal].in{ opacity:1; transform:none; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<header>
+  <nav class="wrap">
+    <div class="brand"><span class="dot"></span>Nagalakshmi K</div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a class="btn btn-primary" href="Nagalakshmi_K_Resume.pdf" download>↓ Resume</a>
+  </nav>
+</header>
+
+<section class="hero wrap" style="border-top:none;">
+  <div class="hero-grid">
+    <div>
+      <div class="eyebrow">SOFTWARE DEVELOPER · REAL-TIME SYSTEMS</div>
+      <h1>Building the connections<br>behind real <span class="accent">conversations.</span></h1>
+      <p class="lede">Full-stack developer with 4+ years designing chat, VoIP, and video-conferencing platforms — React.js, React Native, Node.js, and Java/Spring Boot — from architecture through deployment.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#projects">View Projects →</a>
+        <a class="btn btn-ghost" href="#contact">Get in Touch</a>
+      </div>
+      <div class="status-chip"><span class="ping"></span>AVAILABLE — IMMEDIATE JOINER</div>
+    </div>
+    <div class="wave-panel" data-reveal>
+      <div class="label"><span>live_session.log</span><span>WSS · SIP · FCM</span></div>
+      <div class="bars" id="bars"></div>
+      <div class="stat-row">
+        <div class="stat"><div class="n">4+</div><div class="l">Years Exp.</div></div>
+        <div class="stat"><div class="n">6</div><div class="l">Shipped Platforms</div></div>
+        <div class="stat"><div class="n">3</div><div class="l">Real-time Systems</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="kicker">// ABOUT</div>
+    <h2>Full-stack, end-to-end, real-time.</h2>
+    <div class="about-grid">
+      <div data-reveal>
+        <p>I'm a full-stack developer based in Madurai, India, specializing in <strong>real-time communication systems</strong> — the kind of infrastructure that powers live chat, voice calls, and video conferencing at scale.</p>
+        <p>Across 4+ years and six production platforms, I've owned features end-to-end: architecting WebSocket and SIP-based messaging layers, integrating the Meta WhatsApp Business API for conversational commerce, and building multi-tenant admin systems with role-based access control.</p>
+        <p>I currently work primarily in <strong>React.js, React Native, and Node.js</strong>, and I'm actively deepening my <strong>Java / Spring Boot</strong> and <strong>AWS cloud</strong> skills — bringing a broader full-stack range to every team I join.</p>
+      </div>
+      <div class="fact-list" data-reveal>
+        <div class="fact"><span class="k">LOCATION</span><span class="v">Madurai, Tamil Nadu, India</span></div>
+        <div class="fact"><span class="k">EXPERIENCE</span><span class="v">4+ years</span></div>
+        <div class="fact"><span class="k">CORE STACK</span><span class="v">React.js · React Native · Node.js</span></div>
+        <div class="fact"><span class="k">EXPANDING INTO</span><span class="v">Java · Spring Boot · AWS</span></div>
+        <div class="fact"><span class="k">AVAILABILITY</span><span class="v">Immediate joiner</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="kicker">// STACK</div>
+    <h2>Tools of the trade.</h2>
+    <p class="section-intro">The languages, frameworks, and infrastructure I use to ship real-time, production-grade software.</p>
+    <div class="skill-groups">
+      <div class="skill-card" data-reveal>
+        <h3>Frontend</h3>
+        <div class="chip-row"><span class="chip">React.js</span><span class="chip">Next.js</span><span class="chip">React Native</span><span class="chip">Redux</span></div>
+      </div>
+      <div class="skill-card" data-reveal>
+        <h3>Backend</h3>
+        <div class="chip-row"><span class="chip">Java</span><span class="chip">Spring Boot</span><span class="chip">Node.js</span><span class="chip">NestJS</span></div>
+      </div>
+      <div class="skill-card" data-reveal>
+        <h3>Databases</h3>
+        <div class="chip-row"><span class="chip">MongoDB</span><span class="chip">PostgreSQL</span><span class="chip">Firestore</span><span class="chip">Redis</span></div>
+      </div>
+      <div class="skill-card" data-reveal>
+        <h3>Cloud / DevOps</h3>
+        <div class="chip-row"><span class="chip">AWS (SQS, SNS)</span><span class="chip">Docker (basics)</span><span class="chip">CI/CD (familiar)</span></div>
+      </div>
+      <div class="skill-card" data-reveal>
+        <h3>Tools</h3>
+        <div class="chip-row"><span class="chip">Postman</span><span class="chip">Swagger</span><span class="chip">Git</span><span class="chip">Bitbucket</span><span class="chip">Jenkins</span></div>
+      </div>
+      <div class="skill-card" data-reveal>
+        <h3>Methodologies</h3>
+        <div class="chip-row"><span class="chip">Agile/Scrum</span><span class="chip">REST API Design</span><span class="chip">RBAC</span></div>
+      </div>
+      <div class="skill-card" data-reveal>
+        <h3>AI Tools</h3>
+        <div class="chip-row"><span class="chip">GitHub Copilot</span><span class="chip">Generative AI-assisted dev</span></div>
+      </div>
+      <div class="skill-card" data-reveal>
+        <h3>Languages</h3>
+        <div class="chip-row"><span class="chip">Java</span><span class="chip">JavaScript</span><span class="chip">HTML</span><span class="chip">CSS</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="kicker">// EXPERIENCE</div>
+    <h2>Where I've built.</h2>
+    <div class="timeline">
+      <div class="tl-item" data-reveal>
+        <div class="tl-head"><span class="tl-role">Software Developer</span><span class="tl-date">Apr 2022 – Feb 2025</span></div>
+        <div class="tl-org">Maestrowiz Solutions Private Limited</div>
+        <ul>
+          <li>Owned end-to-end delivery of multiple production mobile and web applications, working across frontend, backend, and deployment using React Native, React.js, and Node.js</li>
+          <li>Took architectural ownership of real-time features — messaging, notifications, and communication modules — collaborating with design and QA to ship reliable, scalable releases</li>
+          <li>Improved code quality and maintainability by introducing reusable component patterns and structured state management practices across projects</li>
+          <li>Worked in Agile/Scrum sprints, participating in sprint planning, code reviews, and cross-functional stakeholder syncs to consistently meet release deadlines</li>
+        </ul>
+      </div>
+      <div class="tl-item" data-reveal>
+        <div class="tl-head"><span class="tl-role">Software Developer</span><span class="tl-date">Jan 2021 – Mar 2022</span></div>
+        <div class="tl-org">Prosperous Tech</div>
+        <ul>
+          <li>Built responsive web and mobile applications using the React ecosystem for a growing customer base</li>
+          <li>Contributed to backend API development and database design across a wide range of REST endpoints</li>
+          <li>Built a strong full-stack foundation across frontend, backend, and product workflows in a fast-paced startup environment</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="kicker">// PROJECTS</div>
+    <h2>Selected work.</h2>
+    <p class="section-intro">Real-time platforms, messaging systems, and multi-tenant products — built end-to-end.</p>
+
+    <div class="project-featured" data-reveal>
+      <span class="tag-featured">★ MAJOR PROJECT</span>
+      <h3>EduKat Platform — Parent, Teacher & Admin Apps</h3>
+      <p>Designed and built a multi-role education ecosystem spanning three connected applications — Parent app, Teacher app, and Admin web portal — enabling real-time collaboration between schools, teachers, and families. Architected the data layer on Firestore for real-time sync across attendance, announcements, and chat modules. Built a chatbot-driven communication system with voice input and speech-to-text transcription, plus rich messaging with image/PDF sharing, Firebase Cloud Messaging alerts, and role-based access control (RBAC) across parent, teacher, and admin roles.</p>
+      <div class="tech-tags"><span>React.js</span><span>React Native</span><span>Node.js</span><span>Firestore</span><span>Redux</span></div>
+    </div>
+
+    <div class="project-grid">
+      <div class="project-card" data-reveal>
+        <h3>SMBLee — Communication & Video Conferencing</h3>
+        <p>Real-time audio/video platform with SIP (Verto) VoIP calling, a scalable WebSocket messaging layer, and video conferencing with recording, in-call chat, file sharing, and meeting scheduling.</p>
+        <div class="tech-tags"><span>React.js</span><span>Spring Boot</span><span>WebSockets</span><span>SIP</span><span>Jitsi</span></div>
+      </div>
+      <div class="project-card" data-reveal>
+        <h3>OrderEase Hub — Multi-Channel Ordering</h3>
+        <p>Multi-channel ordering system (app + WhatsApp). Directly integrated the <span class="highlight-inline">Meta WhatsApp Business API</span> for end-to-end order placement, status updates, and customer notifications.</p>
+        <div class="tech-tags"><span>React Native</span><span>Node.js</span><span>MongoDB</span><span>WhatsApp Business API</span></div>
+      </div>
+      <div class="project-card" data-reveal>
+        <h3>ChatWhiz — WhatsApp Communication Platform</h3>
+        <p>Real-time customer-agent chat system on the <span class="highlight-inline">WhatsApp Business API</span>, using Redis caching and socket optimization to cut response latency at high concurrency.</p>
+        <div class="tech-tags"><span>Node.js</span><span>React.js</span><span>MongoDB</span><span>Redis</span></div>
+      </div>
+      <div class="project-card" data-reveal>
+        <h3>Admin Hub — Multi-Tenant Admin System</h3>
+        <p>Multi-tenant admin platform with a dynamic form builder and hierarchy management, RBAC with Azure AD authentication, and optimized database queries for reliable API performance.</p>
+        <div class="tech-tags"><span>React.js</span><span>Node.js</span><span>MongoDB</span><span>PostgreSQL</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <div class="kicker">// EDUCATION</div>
+    <h2>Foundation.</h2>
+    <div class="edu-grid">
+      <div class="edu-card" data-reveal>
+        <div class="deg">MCA</div>
+        <div class="inst">K.L.N College of Engineering</div>
+        <div class="yr">2019 – 2021</div>
+      </div>
+      <div class="edu-card" data-reveal>
+        <div class="deg">B.Sc Information Technology</div>
+        <div class="inst">The Madura College</div>
+        <div class="yr">2016 – 2019</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="status">
+  <div class="wrap">
+    <div class="kicker">// CURRENT STATUS</div>
+    <h2>Reconnecting — with a stronger stack.</h2>
+    <div class="status-panel" data-reveal>
+      <div class="status-panel-inner">
+        <div class="status-title"><span class="ping" style="width:8px;height:8px;border-radius:50%;background:var(--signal);display:inline-block;"></span>Career Break — Feb 2025 to Present</div>
+        <p>I took a planned career break for childbirth and childcare, as extended maternity leave wasn't available at my previous organization.</p>
+        <p>I've used this time deliberately: preparing in <strong>Java and Spring Boot</strong> to broaden my backend range, and I'm currently enrolled in an <strong>AWS training course</strong> to strengthen my cloud fundamentals. I'm ready to bring this expanded skill set to a full-time role — immediately.</p>
+        <div class="learning-tags"><span>↗ Java &amp; Spring Boot</span><span>↗ AWS (in progress)</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="contact-box">
+      <div class="kicker" style="justify-content:center; display:flex;">// GET IN TOUCH</div>
+      <h2>Let's build something reliable, together.</h2>
+      <p>Open to full-stack roles focused on real-time systems, communication platforms, or backend engineering. Immediate joiner.</p>
+      <div class="contact-links">
+        <a class="btn btn-primary" href="mailto:nagalakshmi002799@gmail.com">✉ Email Me</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/nagalakshmi-k-bb027b200/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn btn-ghost" href="https://github.com/nagalakshmi002799-create" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn btn-ghost" href="Nagalakshmi_K_Resume.pdf" download>↓ Resume</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>Nagalakshmi K · Madurai, India</span>
+      <span>9566761872 · nagalakshmi002799@gmail.com</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // waveform bars
+  const bars = document.getElementById('bars');
+  const heights = [40,70,55,90,60,100,45,80,65,95,50,75,40,85,60];
+  heights.forEach((h,i)=>{
+    const bar = document.createElement('span');
+    bar.style.animationDelay = (i*0.08)+'s';
+    bar.style.height = h+'%';
+    bars.appendChild(bar);
+  });
+
+  // reveal on scroll
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('[data-reveal]').forEach(el=> io.observe(el));
+</script>
+</body>
+</html>
