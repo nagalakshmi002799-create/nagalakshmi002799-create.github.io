@@ -152,9 +152,18 @@
   .tl-role{ font-family: var(--font-display); font-size:19px; font-weight:600; }
   .tl-date{ font-family: var(--font-mono); font-size:12.5px; color: var(--text-faint); }
   .tl-org{ color: var(--amber); font-size:14px; margin-bottom:14px; }
+  .tl-org a{ color: inherit; text-decoration: underline; text-decoration-color: rgba(242,166,90,0.4); }
+  .tl-org a:hover{ color: var(--signal); text-decoration-color: var(--signal); }
   .tl-item ul{ list-style:none; display:flex; flex-direction:column; gap:9px; }
   .tl-item li{ color: var(--text-muted); font-size:14.5px; padding-left:18px; position:relative; }
   .tl-item li::before{ content:'▸'; position:absolute; left:0; color: var(--signal); font-size:12px; top:2px; }
+  .tl-item li a{ color: var(--signal); text-decoration: underline; text-decoration-color: rgba(67,217,196,0.4); }
+  .tl-item li a:hover{ text-decoration-color: var(--signal); }
+  .tl-badge{
+    font-family: var(--font-mono); font-size:10.5px; color: var(--amber);
+    border:1px solid rgba(242,166,90,0.3); background: var(--amber-dim);
+    padding:3px 9px; border-radius:100px; margin-left:10px; vertical-align:middle;
+  }
 
   /* projects */
   .project-featured{
@@ -182,6 +191,12 @@
   .project-card p{ color: var(--text-muted); font-size:14px; margin-bottom:16px; }
   .project-card .tech-tags span{ font-size:11px; padding:4px 9px; color: var(--text-muted); border-color: var(--line); background: rgba(255,255,255,0.03); }
   .highlight-inline{ color: var(--amber); font-weight:600; }
+  .project-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:4px;
+    font-family: var(--font-mono); font-size:12.5px; color: var(--signal);
+  }
+  .project-link:hover{ text-decoration: underline; }
+  .live-dot{ width:6px; height:6px; border-radius:50%; background: var(--signal); box-shadow: 0 0 0 3px var(--signal-dim); display:inline-block; }
 
   /* education */
   .edu-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:20px; }
@@ -200,6 +215,7 @@
   .status-title{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:600; font-size:18px; margin-bottom:14px; }
   .status-panel p{ color: var(--text-muted); font-size:14.5px; margin-bottom:10px; max-width:640px; }
   .status-panel p:last-child{ margin-bottom:0; }
+  .status-panel p a{ color: var(--signal); text-decoration: underline; text-decoration-color: rgba(67,217,196,0.4); }
   .status-panel .learning-tags{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
   .learning-tags span{ font-family: var(--font-mono); font-size:12px; color: var(--amber); border:1px solid rgba(242,166,90,0.3); background: var(--amber-dim); padding:6px 12px; border-radius:100px; }
 
@@ -260,7 +276,7 @@
       <div class="bars" id="bars"></div>
       <div class="stat-row">
         <div class="stat"><div class="n">4+</div><div class="l">Years Exp.</div></div>
-        <div class="stat"><div class="n">6</div><div class="l">Shipped Platforms</div></div>
+        <div class="stat"><div class="n">7</div><div class="l">Shipped Platforms</div></div>
         <div class="stat"><div class="n">3</div><div class="l">Real-time Systems</div></div>
       </div>
     </div>
@@ -274,7 +290,7 @@
     <div class="about-grid">
       <div data-reveal>
         <p>I'm a full-stack developer based in Madurai, India, specializing in <strong>real-time communication systems</strong> — the kind of infrastructure that powers live chat, voice calls, and video conferencing at scale.</p>
-        <p>Across 4+ years and six production platforms, I've owned features end-to-end: architecting WebSocket and SIP-based messaging layers, integrating the Meta WhatsApp Business API for conversational commerce, and building multi-tenant admin systems with role-based access control.</p>
+        <p>Across 4+ years and seven shipped platforms, I've owned features end-to-end: architecting WebSocket and SIP-based messaging layers, integrating the Meta WhatsApp Business API for conversational commerce, and building multi-tenant admin systems with role-based access control.</p>
         <p>I currently work primarily in <strong>React.js, React Native, and Node.js</strong>, and I'm actively deepening my <strong>Java / Spring Boot</strong> expertise, alongside building foundational knowledge in <strong>AI/LLM</strong> — bringing a broader full-stack range to every team I join.</p>
       </div>
       <div class="fact-list" data-reveal>
@@ -296,7 +312,7 @@
     <div class="skill-groups">
       <div class="skill-card" data-reveal>
         <h3>Frontend</h3>
-        <div class="chip-row"><span class="chip">React.js</span><span class="chip">Next.js</span><span class="chip">React Native</span><span class="chip">Redux</span></div>
+        <div class="chip-row"><span class="chip">React.js</span><span class="chip">Next.js</span><span class="chip">React Native</span><span class="chip">Redux</span><span class="chip">Vite</span><span class="chip">Tailwind CSS</span></div>
       </div>
       <div class="skill-card" data-reveal>
         <h3>Backend</h3>
@@ -335,6 +351,15 @@
     <div class="kicker">// EXPERIENCE</div>
     <h2>Where I've built.</h2>
     <div class="timeline">
+      <div class="tl-item" data-reveal>
+        <div class="tl-head"><span class="tl-role">Freelance Developer<span class="tl-badge">LIVE</span></span><span class="tl-date">Oct 2026</span></div>
+        <div class="tl-org">Independent / Self-employed</div>
+        <ul>
+          <li>Delivered a live, responsive travel-agency website (React.js, Vite, Tailwind CSS) on a rapid turnaround to meet the client's urgent go-live requirement — live at <a href="https://ridewetoursandtravels.com/" target="_blank" rel="noopener">ridewetoursandtravels.com</a></li>
+          <li>Handled design-to-code, responsive UI, and deployment independently, end-to-end</li>
+          <li>Scoped as Phase 1 (static site); Phase 2 (planned) will add AI-assisted features and database-backed functionality</li>
+        </ul>
+      </div>
       <div class="tl-item" data-reveal>
         <div class="tl-head"><span class="tl-role">Software Developer</span><span class="tl-date">Apr 2022 – Feb 2025</span></div>
         <div class="tl-org">Maestrowiz Solutions Private Limited</div>
@@ -392,6 +417,12 @@
         <p>Multi-tenant admin platform with a dynamic form builder and hierarchy management, RBAC with Azure AD authentication, and optimized database queries for reliable API performance.</p>
         <div class="tech-tags"><span>React.js</span><span>Node.js</span><span>MongoDB</span><span>PostgreSQL</span></div>
       </div>
+      <div class="project-card" data-reveal>
+        <h3>RideWe Tours and Travels <span class="tl-badge" style="margin-left:8px;">LIVE</span></h3>
+        <p>Freelance travel-agency marketing website, built and deployed on an urgent turnaround. Phase 1 (static) is live now; Phase 2 (planned) adds AI-assisted features and database-backed functionality.</p>
+        <div class="tech-tags"><span>React.js</span><span>Vite</span><span>Tailwind CSS</span></div>
+        <a class="project-link" href="https://ridewetoursandtravels.com/" target="_blank" rel="noopener"><span class="live-dot"></span>ridewetoursandtravels.com ↗</a>
+      </div>
     </div>
   </div>
 </section>
@@ -423,8 +454,8 @@
       <div class="status-panel-inner">
         <div class="status-title"><span class="ping" style="width:8px;height:8px;border-radius:50%;background:var(--signal);display:inline-block;"></span>Career Break — Feb 2025 to Present</div>
         <p>I took a planned career break for childbirth and childcare, as extended maternity leave wasn't available at my previous organization.</p>
-        <p>I've used this time deliberately: preparing in <strong>Java and Spring Boot</strong> to broaden my backend range, and I've recently started learning <strong>AI/LLM</strong> (basic knowledge) to align with my full-stack and real-time communication role. I'm ready to bring this expanded skill set to a full-time role — immediately.</p>
-        <div class="learning-tags"><span>↗ Java &amp; Spring Boot</span><span>↗ AI/LLM (learning)</span></div>
+        <p>I've used this time deliberately: preparing in <strong>Java and Spring Boot</strong> to broaden my backend range, building foundational knowledge in <strong>AI/LLM</strong>, and taking on freelance client work — including <a href="https://ridewetoursandtravels.com/" target="_blank" rel="noopener">ridewetoursandtravels.com</a>, now live in production. I'm ready to bring this expanded skill set to a full-time role — immediately.</p>
+        <div class="learning-tags"><span>↗ Java &amp; Spring Boot</span><span>↗ AI/LLM (learning)</span><span>↗ Freelance (live project)</span></div>
       </div>
     </div>
   </div>
